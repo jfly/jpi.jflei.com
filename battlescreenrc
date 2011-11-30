@@ -1,0 +1,7 @@
+screen -t "Hackathon2011" 1
+stuff "while true; do npm install -d; node newserver.js; done\012"
+
+screen -t "Hackathon2011 git" 2
+
+# TODO - find a proper place for poll.sh! probably should put it in every repo...
+stuff "../tnoodle/tools/poll.sh killall node;\012"

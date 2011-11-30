@@ -1,0 +1,6 @@
+screen -t "tnoodle" 1
+stuff "while true; do ./tmt make dist -p timer; sudo java -jar timer/dist/TNoodleTimer.jar -n -p 8080; done\012"
+
+screen -t "tnoodle git" 2
+
+stuff "tools/poll.sh 'wget localhost:8080/kill/now; rm now'\012"
