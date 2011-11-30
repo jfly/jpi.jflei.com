@@ -25,6 +25,13 @@ if [ "`screen -ls | grep battle`" != "" ]; then
 fi
 ( cd servers/Hackathon2011; screen -d -m -S battle -c ../../battlescreenrc )
 
-# nginx is daemonized, so there's no use to running it inside of a screen
-sudo killall nginx
-sudo nginx -c `readlink -f nginx.conf`
+if [ "`screen -ls | grep jflei`" != "" ]; then
+	echo "Screen session jflei already running, killing it"
+	# TODO if there's more than one session named jflei, this doesn't work
+	screen -S jflei -X quit
+fi
+( screen -d -m -S jflei -c jfleiscreenrc )
+
+## nginx is daemonized, so there's no use to running it inside of a screen
+##sudo killall node
+##sudo nginx -c `readlink -f nginx.conf`
