@@ -1,6 +1,0 @@
-[submodule "deps/tnoodle"]
-	path = deps/tnoodle
-	url = git@github.com:jfly/tnoodle.git
-[submodule "deps/Hackathon2011"]
-	path = deps/Hackathon2011
-	url = git@github.com:jfly/Hackathon2011.git
