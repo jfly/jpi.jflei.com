@@ -3,6 +3,11 @@
 # TODO - now that i think about it, perhaps most of this is best inside of the
 # appropriate repos...
 
+# From http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo "Changing to $DIR"
+cd $DIR
+
 if [ -d "servers" ]; then
 	echo "servers directory already exists, not checking out sub servers"
 else
