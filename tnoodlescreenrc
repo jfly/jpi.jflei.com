@@ -1,5 +1,5 @@
 screen -t "tnoodle" 1
-stuff "while true; do ./tmt make dist -p timer; sudo java -jar timer/dist/TNoodleTimer.jar -n -p 8080; done\012"
+stuff "while true; do ./tmt make dist -p timer; sudo java -jar timer/dist/TNoodleTimer.jar -n -p 8080 --inject ../../tnoodle-analytics.js; done\012"
 
 screen -t "tnoodle git" 2
 
