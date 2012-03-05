@@ -13,7 +13,6 @@ if [ -d "servers" ]; then
 else
 	mkdir servers
 	git clone --recursive git://github.com/jfly/tnoodle.git servers/tnoodle
-	git clone --recursive git://github.com/jfly/Hackathon2011.git servers/Hackathon2011
 fi
 
 if [ "`screen -ls | grep tnoodle`" != "" ]; then
@@ -28,7 +27,7 @@ if [ "`screen -ls | grep battle`" != "" ]; then
 	# TODO if there's more than one session named battle, this doesn't work
 	screen -S battle -X quit
 fi
-( cd servers/Hackathon2011; screen -d -m -S battle -c ../../battlescreenrc )
+( cd servers/tnoodle; screen -d -m -S battle -c ../../battlescreenrc )
 
 if [ "`screen -ls | grep jflei`" != "" ]; then
 	echo "Screen session jflei already running, killing it"
@@ -37,6 +36,6 @@ if [ "`screen -ls | grep jflei`" != "" ]; then
 fi
 ( screen -d -m -S jflei -c jfleiscreenrc )
 
-## nginx is daemonized, so there's no use to running it inside of a screen
+## nginx is daemonized, so there's no use running it inside of a screen
 ##sudo killall node
 ##sudo nginx -c `readlink -f nginx.conf`
