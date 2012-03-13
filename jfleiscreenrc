@@ -1,5 +1,5 @@
 screen -t "jflei" 1
-stuff "while true; do npm install -d; sudo node jflei.js; done\012"
+stuff "while true; do npm install; sudo node jflei.js; done\012"
 
 screen -t "jflei git" 2
 
