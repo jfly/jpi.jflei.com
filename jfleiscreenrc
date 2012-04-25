@@ -3,5 +3,4 @@ stuff "while true; do npm install; sudo node jflei.js; done\012"
 
 screen -t "jflei git" 2
 
-# TODO - find a proper place for poll.sh! probably should put it in every repo...
-stuff "servers/tnoodle/tools/poll.sh killall node;\012"
+stuff "git-tools/poll.sh killall node;\012"
