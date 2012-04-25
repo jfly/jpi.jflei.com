@@ -3,5 +3,4 @@ stuff "while true; do sudo ./tmt make clean -p noderacer; ./tmt make run -p node
 
 screen -t "noderacer git" 2
 
-# TODO - find a proper place for poll.sh! probably should put it in every repo...
-stuff "../tnoodle/tools/poll.sh sudo killall node;\012"
+stuff "git-tools/poll.sh sudo killall node;\012"
