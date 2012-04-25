@@ -13,6 +13,7 @@ if [ -d "servers" ]; then
 else
 	mkdir servers
 	git clone --recursive git://github.com/jfly/tnoodle.git servers/tnoodle
+	git clone --recursive git://github.com/jfly/tnoodle.git servers/tnoodle-battle
 fi
 
 if [ "`screen -ls | grep tnoodle`" != "" ]; then
@@ -27,7 +28,7 @@ if [ "`screen -ls | grep battle`" != "" ]; then
 	# TODO if there's more than one session named battle, this doesn't work
 	screen -S battle -X quit
 fi
-( cd servers/tnoodle; screen -d -m -S battle -c ../../battlescreenrc )
+( cd servers/tnoodle-battle; screen -d -m -S battle -c ../../battlescreenrc )
 
 if [ "`screen -ls | grep jflei`" != "" ]; then
 	echo "Screen session jflei already running, killing it"
