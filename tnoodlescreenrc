@@ -3,4 +3,4 @@ stuff "while true; do sudo ./tmt make clean -p timer; ./tmt make dist -p timer -
 
 screen -t "tnoodle git" 2
 
-stuff "git-tools/poll.sh 'wget localhost:8080/kill/now; rm now'\012"
+stuff "git-tools/poll.sh 'curl localhost:8080/kill/now'\012"
