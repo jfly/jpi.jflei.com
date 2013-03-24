@@ -9,10 +9,13 @@ if [ -d "servers" ]; then
 	echo "servers directory already exists, not checking out sub servers"
 else
 	mkdir servers
-	git clone --recursive git://github.com/jfly/tnoodle.git servers/tnoodle
+	git clone --recursive git@github.com:jfly/tnoodle.git servers/tnoodle
+
+	git clone --recursive git@github.com:jfly/gatekeeper.git servers/gatekeeper
 fi
 
-servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK=foo
+servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK=tnoodle.tk
+servers/gatekeeper/startserver.py --username twilio --password gobears --port 8042 --sslcrt `readlink -m server.crt` --sslkey `readlink -m server.key`
 
 ## nginx is daemonized, so there's no use running it inside of a screen
 sudo nginx -s quit
