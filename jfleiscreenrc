@@ -1,6 +1,0 @@
-screen -t "jflei" 1
-stuff "while true; do npm install; sudo node jflei.js; done\012"
-
-screen -t "jflei git" 2
-
-stuff "git-tools/poll.sh killall node;\012"

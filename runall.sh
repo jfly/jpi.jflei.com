@@ -12,16 +12,8 @@ else
 	git clone --recursive git://github.com/jfly/tnoodle.git servers/tnoodle
 fi
 
-servers/tnoodle/RunAll.py --inject `readlink -e tnoodle-analytics.js`
-
-# TODO port jflei code to use git-tools stuff <<<
-if [ "`screen -ls | grep jflei`" != "" ]; then
-	echo "Screen session jflei already running, killing it"
-	# TODO if there's more than one session named jflei, this doesn't work
-	screen -S jflei -X quit
-fi
-( screen -d -m -S jflei -c jfleiscreenrc )
+servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js`
 
 ## nginx is daemonized, so there's no use running it inside of a screen
-##sudo killall node
-##sudo nginx -c `readlink -f nginx.conf`
+sudo nginx -s quit
+sudo nginx -c `readlink -m nginx.conf`
