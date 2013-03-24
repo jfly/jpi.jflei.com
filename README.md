@@ -4,6 +4,9 @@ Stuff to look into:
 
  - http://www.envjs.com/ Tests would be really nice to have. They should be inside of tnoodle and Hackathon2011, though.
 
+Need a version of nginx configured with:
+
+ - ./configure --with-http_ssl_module --with-http_sub_module
 
 Must generate ssl certificates before running `./runall.sh`:
 
