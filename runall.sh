@@ -12,7 +12,7 @@ else
 	git clone --recursive git://github.com/jfly/tnoodle.git servers/tnoodle
 fi
 
-servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js`
+servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK=foo
 
 ## nginx is daemonized, so there's no use running it inside of a screen
 sudo nginx -s quit
