@@ -14,7 +14,7 @@ else
 	git clone --recursive git@github.com:jfly/gatekeeper.git servers/gatekeeper
 fi
 
-servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK="Do not use tnoodle.tk to generate scrambles for a competition"
+servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK="Do not use tnoodle.tk to generate scrambles for a WCA competition"
 servers/gatekeeper/startserver.py --username twilio --password gobears --port 8042 --sslcrt `readlink -m server.crt` --sslkey `readlink -m server.key`
 
 ## nginx is daemonized, so there's no use running it inside of a screen
