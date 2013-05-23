@@ -17,7 +17,7 @@ fi
 
 servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK="Do not use tnoodle.tk to generate scrambles for a WCA competition."
 servers/gatekeeper/startserver.py --username twilio --password gobears --port 8042 --sslcrt `readlink -m server.crt` --sslkey `readlink -m server.key`
-servers/TornadoTracker/startserver.py "/home/jeremy/Dropbox/Apps/Tornado Tracker" /home/jeremy/TornadoTracker/
+servers/TornadoTracker/startserver.py /home/jeremy/TornadoTracker/
 
 ## nginx is daemonized, so there's no use running it inside of a screen
 sudo nginx -s quit
