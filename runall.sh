@@ -15,7 +15,7 @@ else
 	git clone --recursive git@github.com:jfly/TornadoTracker.git servers/TornadoTracker
 fi
 
-servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK="Do not use tnoodle.tk to generate scrambles for a WCA competition."
+#<<<servers/tnoodle/RunAll.py --inject `readlink -m tnoodle-analytics.js` --jsenv WATERMARK="Do not use tnoodle.tk to generate scrambles for a WCA competition."
 servers/gatekeeper/startserver.py --username twilio --password gobears --port 8042 --sslcrt `readlink -m server.crt` --sslkey `readlink -m server.key`
 servers/TornadoTracker/startserver.py /home/jeremy/TornadoTracker/
 

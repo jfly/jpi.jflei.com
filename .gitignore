@@ -1,5 +1,6 @@
 servers/
 node_modules/
+tnt/
 
 server.crt
 server.csr
