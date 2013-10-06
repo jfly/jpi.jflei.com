@@ -34,4 +34,7 @@ for asset in assets:
 indexName = 'tnt/index.html'
 if os.path.exists(indexName):
     os.remove(indexName)
-os.symlink('tmt.html', indexName)
+# for some reason, nginx is serving up a 403 with
+# a symlink, so we just copy the file.
+#os.symlink('tnt.html', indexName)
+shutil.copyfile('tnt/tnt.html', indexName)
