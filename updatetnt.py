@@ -4,6 +4,7 @@ import urllib.request
 import json
 import os.path
 import os
+import shutil
 
 API_PREVIEW_HEADER = {"Accept": "application/vnd.github.manifold-preview"}
 
