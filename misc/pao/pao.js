@@ -2,6 +2,8 @@ var pao = null;
 
 (function() {
 
+var DEFAULT_TAB_NAME = 'PAO list';
+
 function PAO() {
     var that = this;
 
@@ -23,7 +25,7 @@ function PAO() {
         var paoList = document.createElement("div");
         that.paoList = paoList;
         paoTables.appendChild(paoList);
-        var defaultTab = that._addTab('PAO list', paoList);
+        that._addTab(DEFAULT_TAB_NAME, paoList);
 
         for(var i = 0; i < that.wordTypes.length; i++) {
             var wordType = that.wordTypes[i];
@@ -34,7 +36,6 @@ function PAO() {
 
             that._addTab(wordType + " grid", grid);
         }
-        that._tabClicked(defaultTab);
         that._createPaoList();
         that._createPaoGrids();
 
@@ -57,30 +58,35 @@ PAO.prototype._addTab = function(title, area) {
     tab.area = area;
 
     tabsDiv.appendChild(tab);
-    that.tabsAndAreas.push([ tab, area ]);
+    that.tabsAndAreas[title] = [ tab, area ];
     return tab;
 };
 
 PAO.prototype._tabClicked = function(tab) {
     var that = this;
 
-    for(var i = 0; i < that.tabsAndAreas.length; i++) {
-        var otherTab = that.tabsAndAreas[i][0];
-        var otherArea = that.tabsAndAreas[i][1];
-        if(otherTab == tab) {
-            continue;
+    for(var title in that.tabsAndAreas) {
+        if(that.tabsAndAreas.hasOwnProperty(title)) {
+            var otherTab = that.tabsAndAreas[title][0];
+            var otherArea = that.tabsAndAreas[title][1];
+            if(otherTab == tab) {
+                continue;
+            }
+            otherTab.classList.remove('active');
+            otherArea.style.display = 'none';
         }
-        otherTab.classList.remove('active');
-        otherArea.style.display = 'none';
     }
     tab.classList.add('active');
     tab.area.style.display = '';
+    that.activeTab = tab;
+    that._updateHash();
 };
 
 PAO.prototype._hashChange = function(e) {
     var that = this;
 
     var hash = location.hash.substring(1);
+    var desiredTab = null;
     that.pairs_pao = {};
     if(hash.length != 0) {
         var pairs = hash.split("&");
@@ -92,6 +98,10 @@ PAO.prototype._hashChange = function(e) {
                 continue;
             }
             var pair = pair_pao[0];
+            if(pair == "tab") {
+                desiredTab = pair_pao[1];
+                continue;
+            }
             var pao = pair_pao[1].split(",");
             var validPair = false;
             if(pair.length == 2) {
@@ -115,18 +125,21 @@ PAO.prototype._hashChange = function(e) {
             that.pairs_pao[pair] = paoDict;
         }
     }
-
+    var tab_area = that.tabsAndAreas[desiredTab] || that.tabsAndAreas[DEFAULT_TAB_NAME];
+    that._tabClicked(tab_area[0]);
     that._refreshData();
 };
 
 PAO.prototype._cellClicked = function(e) {
+    var that = this;
+
     var pair = e.target.dataset.pair;
     var type = e.target.dataset.type;
-    if(!this.pairs_pao[pair]) {
-        this.pairs_pao[pair] = {};
+    if(!that.pairs_pao[pair]) {
+        that.pairs_pao[pair] = {};
     }
     // Sanitize your inputs!
-    var oldValue = this.pairs_pao[pair][type];
+    var oldValue = that.pairs_pao[pair][type];
     var newValue = prompt("Enter word for " + pair + " " + type, oldValue || '');
     if(newValue === null) {
         return;
@@ -134,16 +147,21 @@ PAO.prototype._cellClicked = function(e) {
 
     newValue = newValue.replace(/[=,&]/g, "");
 
-    this.log("Old " + pair + " " + type + ": " + newValue);
-    this.pairs_pao[pair][type] = newValue;
-    this.log("New " + pair + " " + type + ": " + this.pairs_pao[pair][type]);
+    that.log("Old " + pair + " " + type + ": " + newValue);
+    that.pairs_pao[pair][type] = newValue;
+    that.log("New " + pair + " " + type + ": " + that.pairs_pao[pair][type]);
 
+    that._updateHash();
+};
+
+PAO.prototype._updateHash = function() {
+    var that = this;
     var pairStrs = [];
-    var definedPairs = Object.keys(this.pairs_pao).sort();
+    var definedPairs = Object.keys(that.pairs_pao).sort();
     for(var i = 0; i < definedPairs.length; i++) {
         var pair = definedPairs[i];
-        var paoDict = this.pairs_pao[pair];
-        var paoArr = this.wordTypes.map(function(type) { return paoDict[type] || ''; });
+        var paoDict = that.pairs_pao[pair];
+        var paoArr = that.wordTypes.map(function(type) { return paoDict[type] || ''; });
         var pao = paoArr.join(",");
         var emptyArr = [ '', '', '' ];
         if(pao == emptyArr.join(",")) {
@@ -152,6 +170,7 @@ PAO.prototype._cellClicked = function(e) {
 
         pairStrs.push(pair + "=" + pao);
     }
+    pairStrs.push("tab=" + that.activeTab.textContent);
     var hash = pairStrs.join("&");
     location.hash = hash;
 };
@@ -163,9 +182,9 @@ PAO.prototype._refreshData = function() {
     for(var i = 0; i < that.alphabet.length; i++) {
         for(var j = 0; j < that.alphabet.length; j++) {
             var pair = that.alphabet[i] + that.alphabet[j];
-            for(var k = 0; k < this.wordTypes.length; k++) {
-                var wordType = this.wordTypes[k];
-                var word = (this.pairs_pao[pair] || {})[wordType] || '';
+            for(var k = 0; k < that.wordTypes.length; k++) {
+                var wordType = that.wordTypes[k];
+                var word = (that.pairs_pao[pair] || {})[wordType] || '';
 
                 var gridInputId = that._getGridInputId(pair, wordType);
                 document.getElementById(gridInputId).textContent = word;
