@@ -3,18 +3,56 @@
 <title>PAO</title>
 <script src="pao.js"></script>
 <style type="text/css">
-    .tab {
-        margin: 5px;
-        cursor: pointer;
-        color: red;
-        text-decoration: underline;
-    }
-    .tab:hover {
-        text-decoration: none;
-    }
-    .active {
-        text-decoration: none;
-    }
+.tab {
+    margin: 5px;
+    cursor: pointer;
+    color: red;
+    text-decoration: underline;
+}
+.tab:hover {
+    text-decoration: none;
+}
+.active {
+    text-decoration: none;
+}
+
+#tabs {
+    margin: 10px;
+}
+
+table {
+    border-width: 1px;
+    border-collapse: collapse;
+}
+table th {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+}
+table td {
+    border-width: 1px;
+    padding: 8px;
+    border-style: solid;
+}
+
+tr:hover, td.hovered {
+    background-color: #ccc;
+}
+
+td {
+    cursor: pointer;
+}
+td:hover {
+    background-color: #aaa;
+}
+
+table thead, td:nth-child(1) {
+    font-weight: bold;
+    cursor: auto;
+    font-family: monospace;
+}
+
+
 </style>
 </head>
 <body>

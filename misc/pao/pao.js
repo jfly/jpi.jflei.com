@@ -119,17 +119,23 @@ PAO.prototype._hashChange = function(e) {
     that._refreshData();
 };
 
-PAO.prototype._fieldChanged = function(e) {
+PAO.prototype._cellClicked = function(e) {
     var pair = e.target.dataset.pair;
     var type = e.target.dataset.type;
     if(!this.pairs_pao[pair]) {
         this.pairs_pao[pair] = {};
     }
     // Sanitize your inputs!
-    e.target.value = e.target.value.replace(/[=,&]/g, "");
+    var oldValue = this.pairs_pao[pair][type];
+    var newValue = prompt("Enter value for " + pair + " " + type, oldValue || '');
+    if(newValue === null) {
+        return;
+    }
 
-    this.log("Old " + pair + " " + type + ": " + this.pairs_pao[pair][type]);
-    this.pairs_pao[pair][type] = e.target.value;
+    newValue = newValue.replace(/[=,&]/g, "");
+
+    this.log("Old " + pair + " " + type + ": " + newValue);
+    this.pairs_pao[pair][type] = newValue;
     this.log("New " + pair + " " + type + ": " + this.pairs_pao[pair][type]);
 
     var pairStrs = [];
@@ -162,9 +168,9 @@ PAO.prototype._refreshData = function() {
                 var word = (this.pairs_pao[pair] || {})[wordType] || '';
 
                 var gridInputId = that._getGridInputId(pair, wordType);
-                document.getElementById(gridInputId).value = word;
+                document.getElementById(gridInputId).textContent = word;
                 var listInputId = that._getListInputId(pair, wordType);
-                document.getElementById(listInputId).value = word;
+                document.getElementById(listInputId).textContent = word;
             }
         }
     }
@@ -200,17 +206,64 @@ PAO.prototype._createPaoList = function() {
             row.insertCell(-1).appendChild(pairTextNode);
             for(var k = 0; k < that.wordTypes.length; k++) {
                 var wordType = that.wordTypes[k];
-                var field = document.createElement('input');
-                field.dataset.pair = pair;
-                field.dataset.type = wordType;
-                field.id = that._getListInputId(pair, wordType);
-                field.addEventListener('change', that._fieldChanged.bind(that));
-                row.insertCell(-1).appendChild(field);
+                var cell = row.insertCell(-1);
+                cell.dataset.pair = pair;
+                cell.dataset.type = wordType;
+                cell.id = that._getListInputId(pair, wordType);
+                cell.addEventListener('click', that._cellClicked.bind(that));
+                cell.addEventListener('mouseover', that._mouseOverCell.bind(that));
+                cell.addEventListener('mouseout', that._mouseOutCell.bind(that));
             }
         }
     }
 
     that.paoList.appendChild(paoListTable);
+};
+
+function elIndex(el) {
+    var index = 0;
+    while(el.previousElementSibling) {
+        index++;
+        el = el.previousElementSibling;
+    }
+    return index;
+}
+
+function findAncestor(el, cond) {
+    if(el === null || cond(el)) {
+        return el;
+    }
+    return findAncestor(el.parentNode, cond);
+}
+
+PAO.prototype._mouseOverCell = function(e) {
+    this._hoverCell(e.target, true);
+};
+
+PAO.prototype._mouseOutCell = function(e) {
+    this._hoverCell(e.target, false);
+};
+
+PAO.prototype._hoverCell = function(cell, hovered) {
+    var column = elIndex(cell);
+    var table = findAncestor(cell, function(anscestor) {
+        return anscestor.tagName == "TABLE";
+    });
+    var cells = table.querySelectorAll("td:nth-child(" + (column+1) + ")");
+    for(var i = 0; i < cells.length; i++) {
+        if(hovered) {
+            cells[i].classList.add('hovered');
+        } else {
+            cells[i].classList.remove('hovered');
+        }
+    }
+    if(cell.cornerCell) {
+        if(hovered) {
+            cell.cornerCell.textContent = cell.dataset.pair;
+        } else {
+            cell.cornerCell.innerHTML = "&nbsp;&nbsp;";
+        }
+    }
 };
 
 PAO.prototype._getGridInputId = function(pair, wordType) {
@@ -228,7 +281,7 @@ PAO.prototype._createPaoGrids = function() {
         var paoGridTableHead = document.createElement("thead");
         paoGridTable.appendChild(paoGridTableHead);
         var row = paoGridTableHead.insertRow(-1);
-        row.insertCell(-1); // corner
+        var cornerCell = row.insertCell(-1); // corner
         for(var j = 0; j < that.alphabet.length; j++) {
             var headerCell = row.insertCell(-1);
             headerCell.appendChild(document.createTextNode(that.alphabet[j]));
@@ -236,22 +289,28 @@ PAO.prototype._createPaoGrids = function() {
 
         var paoGridTableBody = document.createElement("tbody");
         paoGridTable.appendChild(paoGridTableBody);
+        var cell = null;
         for(var j = 0; j < that.alphabet.length; j++) {
             var row = paoGridTableBody.insertRow(-1);
             row.insertCell(-1).appendChild(document.createTextNode(that.alphabet[j]));
             for(var k = 0; k < that.alphabet.length; k++) {
                 var pair = that.alphabet[j] + that.alphabet[k];
-                var field = document.createElement('input');
-                field.dataset.pair = pair;
-                field.dataset.type = wordType;
-                field.id = that._getGridInputId(pair, wordType);
-                field.addEventListener('change', that._fieldChanged.bind(that));
-                row.insertCell(-1).appendChild(field);
+                cell = row.insertCell(-1);
+                cell.dataset.pair = pair;
+                cell.dataset.type = wordType;
+                cell.cornerCell = cornerCell;
+                cell.id = that._getGridInputId(pair, wordType);
+                cell.addEventListener('click', that._cellClicked.bind(that));
+                cell.addEventListener('mouseover', that._mouseOverCell.bind(that));
+                cell.addEventListener('mouseout', that._mouseOutCell.bind(that));
             }
         }
+        // This will resize the corner appropriately.
+        that._hoverCell(cell, false);
 
         grid.appendChild(paoGridTable);
     }
+
 };
 
 PAO.prototype.log = function(str) {
