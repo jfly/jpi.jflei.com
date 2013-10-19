@@ -1,5 +1,8 @@
 var pao = null;
 
+// Issues
+//  4. would an explicit touch listener be smoother on mobile?
+
 (function() {
 
 var DEFAULT_TAB_NAME = 'PAO list';
@@ -19,6 +22,7 @@ function PAO() {
     that.pairs_pao = null;
     that.tabsAndAreas = [];
     that.paoGrids = {};
+    that.tables = [];
 
     window.addEventListener('load', function() {
         var paoTables = document.getElementById('paoTables');
@@ -195,6 +199,13 @@ PAO.prototype._refreshData = function() {
             }
         }
     }
+    
+    // Refresh the sticky table headers for all tables
+    $(that.tables).each(function(i, table) {
+        var $table = $(table);
+        var sticky = $table.data('sticky');
+        sticky.refreshWidths.bind(sticky)();
+    });
 };
 
 PAO.prototype._getListInputId = function(pair, wordType) {
@@ -209,9 +220,13 @@ PAO.prototype._createPaoList = function() {
     paoListTable.appendChild(paoListTableHead);
 
     var header = paoListTableHead.insertRow(-1);
-    header.insertCell(-1).appendChild(document.createTextNode("Pair"));
+    var cornerCell = document.createElement('th');
+    cornerCell.appendChild(document.createTextNode("Pair"));
+    header.appendChild(cornerCell); // corner
     for(var i = 0; i < that.wordTypes.length; i++) {
-        header.insertCell(-1).appendChild(document.createTextNode(that.wordTypes[i]));
+	var headerCell = document.createElement('th');
+        header.appendChild(headerCell);
+	headerCell.appendChild(document.createTextNode(that.wordTypes[i]));
     }
 
     var paoListTableBody = document.createElement("tbody");
@@ -239,6 +254,8 @@ PAO.prototype._createPaoList = function() {
     }
 
     that.paoList.appendChild(paoListTable);
+    that.tables.push(paoListTable);
+    $(paoListTable).sticky({ columnCount: 1});
 };
 
 function elIndex(el) {
@@ -278,11 +295,16 @@ PAO.prototype._hoverCell = function(cell, hovered) {
             cells[i].classList.remove('hovered');
         }
     }
-    if(cell.cornerCell) {
-        if(hovered) {
-            cell.cornerCell.textContent = cell.dataset.pair;
-        } else {
-            cell.cornerCell.innerHTML = "&nbsp;&nbsp;";
+    if(cell.cornerCells) {
+        for(var i = 0; i < cell.cornerCells.length; i++) {
+            var cornerCell = cell.cornerCells[i];
+            if(hovered) {
+//cornerCell.style.backgroundColor = 'red';
+                cornerCell.textContent = cell.dataset.pair;
+            } else {
+//cornerCell.style.backgroundColor = '';
+                cornerCell.innerHTML = "&nbsp;&nbsp;";
+            }
         }
     }
 };
@@ -301,10 +323,12 @@ PAO.prototype._createPaoGrids = function() {
         var paoGridTable = document.createElement("table");
         var paoGridTableHead = document.createElement("thead");
         paoGridTable.appendChild(paoGridTableHead);
-        var row = paoGridTableHead.insertRow(-1);
-        var cornerCell = row.insertCell(-1); // corner
+        var header = paoGridTableHead.insertRow(-1);
+        var cornerCell = document.createElement('th');
+        header.appendChild(cornerCell); // corner
         for(var j = 0; j < that.alphabet.length; j++) {
-            var headerCell = row.insertCell(-1);
+	    var headerCell = document.createElement('th');
+            header.appendChild(headerCell);
             headerCell.appendChild(document.createTextNode(that.alphabet[j]));
         }
 
@@ -319,7 +343,7 @@ PAO.prototype._createPaoGrids = function() {
                 cell = row.insertCell(-1);
                 cell.dataset.pair = pair;
                 cell.dataset.type = wordType;
-                cell.cornerCell = cornerCell;
+                cell.cornerCells = [ cornerCell ];
                 cell.id = that._getGridInputId(pair, wordType);
                 cell.addEventListener('click', that._cellClicked.bind(that));
                 cell.addEventListener('mouseover', that._mouseOverCell.bind(that));
@@ -330,6 +354,23 @@ PAO.prototype._createPaoGrids = function() {
         that._hoverCell(cell, false);
 
         grid.appendChild(paoGridTable);
+        that.tables.push(paoGridTable);
+
+        $(paoGridTable).sticky({ columnCount: 1 });
+        var sticky = $(paoGridTable).data('sticky');
+        var stickyCornerCell = sticky.$stickyTableCorner.find('tr')[0].children[0];
+        var stickyHeaderCornerCell = sticky.$stickyTableHeader.find('tr')[0].children[0];
+        var stickyColumnCornerCell = sticky.$stickyTableColumn.find('tr')[0].children[0];
+        for(var j = 0; j < that.alphabet.length; j++) {
+            for(var k = 0; k < that.alphabet.length; k++) {
+                var pair = that.alphabet[j] + that.alphabet[k];
+                var id = that._getGridInputId(pair, wordType);
+                var cell = document.getElementById(id);
+                cell.cornerCells.push(stickyCornerCell);
+                cell.cornerCells.push(stickyHeaderCornerCell);
+                cell.cornerCells.push(stickyColumnCornerCell);
+            }
+        }
     }
 
 };

@@ -1,7 +1,11 @@
 <html>
 <head>
 <title>PAO</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.5, user-scalable=yes">
 <script src="pao.js"></script>
+<script src="jquery-2.0.3.min.js"></script>
+<script src="sticky.js"></script>
 <style type="text/css">
 .tab {
     margin: 5px;
@@ -41,16 +45,22 @@ tr:hover, td.hovered {
 
 td {
     cursor: pointer;
+    white-space: nowrap;
 }
 td:hover {
     background-color: #aaa;
 }
 
-table thead, td:nth-child(1) {
+table thead, td:nth-child(1), th:nth-child(1) {
     font-weight: bold;
     cursor: auto;
-    font-family: monospace;
+    background-color: #ddd;
 }
+td:nth-child(1), th:nth-child(1) {
+    min-width: 40px;
+    max-width: 40px;
+}
+
 
 
 </style>
