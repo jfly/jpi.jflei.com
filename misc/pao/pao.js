@@ -127,7 +127,7 @@ PAO.prototype._cellClicked = function(e) {
     }
     // Sanitize your inputs!
     var oldValue = this.pairs_pao[pair][type];
-    var newValue = prompt("Enter value for " + pair + " " + type, oldValue || '');
+    var newValue = prompt("Enter word for " + pair + " " + type, oldValue || '');
     if(newValue === null) {
         return;
     }
