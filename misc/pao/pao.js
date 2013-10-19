@@ -170,7 +170,9 @@ PAO.prototype._updateHash = function() {
 
         pairStrs.push(pair + "=" + pao);
     }
-    pairStrs.push("tab=" + that.activeTab.textContent);
+    if(that.activeTab.textContent != DEFAULT_TAB_NAME) {
+        pairStrs.push("tab=" + that.activeTab.textContent);
+    }
     var hash = pairStrs.join("&");
     location.hash = hash;
 };
