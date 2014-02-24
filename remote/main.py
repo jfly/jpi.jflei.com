@@ -15,6 +15,7 @@ define("port", default=8888, help="run on the given port", type=int)
 
 tvPowerStatus = "standby"
 desiredTvPowerStatus = None
+pendingAsRequest = False
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -23,6 +24,11 @@ class MainHandler(tornado.web.RequestHandler):
 class TvStatusHandler(tornado.web.RequestHandler):
     def get(self):
         self.write({"powerStatus": tvPowerStatus})
+
+class AsHandler(tornado.web.RequestHandler):
+    def get(self):
+        global pendingAsRequest
+        pendingAsRequest = True
 
 class TvOnHandler(tornado.web.RequestHandler):
     def initialize(self, newStatus):
@@ -37,6 +43,7 @@ application = tornado.web.Application([
     (r"/tv/status", TvStatusHandler),
     (r"/tv/on", TvOnHandler, dict(newStatus='on')),
     (r"/tv/standby", TvOnHandler, dict(newStatus='standby')),
+    (r"/tv/as", AsHandler),
 ])
 
 # Stolen from http://tornadogists.org/6723392/
@@ -80,11 +87,11 @@ def pollTvStatus():
 
 
 # TODO - Look into running a persistent cec-client to avoid
-#        startup and teardown costs.
+#        startup and teardown costs, and breaking xbmc.
 # cec-client commands came from http://forums.pulse-eight.com/yaf_postst912_power-status-of-TV-using-cec-client.aspx
 @coroutine
 def pollTvStatusOnce():
-    global tvPowerStatus, desiredTvPowerStatus
+    global tvPowerStatus, desiredTvPowerStatus, pendingAsRequest
     stdin_data = 'pow 0'.encode("utf-8")
     cmds = [ "cec-client", "-d", "1", "-s" ]
     result, error = yield call_subprocess(cmds=cmds, stdin_data=stdin_data)
@@ -119,6 +126,17 @@ def pollTvStatusOnce():
                 print("result: %s" % result)
                 print("error: %s" % error)
             desiredTvPowerStatus = None
+    if pendingAsRequest:
+        print("Requesting to be active source")
+
+        stdin_data = 'as'.encode("utf-8")
+        cmds = [ "cec-client", "-d", "1", "-s" ]
+        result, error = yield call_subprocess(cmds=cmds, stdin_data=stdin_data)
+        if error:
+            print("Error running command: %s" % cmds)
+            print("result: %s" % result)
+            print("error: %s" % error)
+        pendingAsRequest = None
 
 if __name__ == "__main__":
     parse_command_line()

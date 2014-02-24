@@ -18,9 +18,23 @@
         background-position: center;
     }
 
-    #tvStatus {
-        position: relative;
-        margin-top: 40%;
+    .boxTextBottom, .boxTextTop {
+        position: absolute;
+        left: 0;
+        right: 0;
+
+        color: white;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 1px;
+        text-align: center;
+    }
+
+    .boxTextBottom {
+        bottom: 0;
+    }
+
+    .boxTextTop {
+        top: 0;
     }
 
     .wrap {
@@ -41,18 +55,16 @@
     .box {
         width: 20%;
         padding-bottom: 20%;
-        /*background: #00F;
-        color: #FFF;*/
         position: relative;
         float: left;
     }
 
     .boxInner {
         position: absolute;
-        left: 10px;
-        right: 10px;
-        top: 10px;
-        bottom: 10px;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        bottom: 5px;
         background: rgba(255, 255, 255, 0.4);
         border: 1px solid black;
         overflow: hidden;
@@ -103,35 +115,48 @@ $(document).ready(function() {
         }
     }
 
-    var powerButtons = $('.powerButton');
+    var ajaxButtons = $('.ajaxButton');
 
     var pendingRequest = null;
-    powerButtons.click(function(e) {
+    ajaxButtons.click(function(e) {
         if(pendingRequest !== null) {
             return;
         }
         e.preventDefault();
 
-        pendingRequest = $.ajax({
-            url: this.href
-        }).done(function() {
-        }).fail(function(xhr, textStatus, errorThrown) {
-            log(textStatus);
-            log(errorThrown);
-            alert("Error! " + textStatus + " " + errorThrown);
-        }).always(function() {
-            pendingRequest = null;
-            powerButtons.find("img").css("animation", "");
+        var requests = [ this.href ];
+        var extraRequest = $(this).data('extra-request');
+        if(extraRequest) {
+            requests.push(extraRequest);
+        }
+        requests.forEach(function(request) {
+            pendingRequest = $.ajax({
+                url: request
+            }).done(function() {
+            }).fail(function(xhr, textStatus, errorThrown) {
+                if(xhr.responseText == "") {
+                    // For some reason, xbmc is returning an empty string
+                    // on successful ajax requests. Detect this and don't
+                    // error out.
+                    return;
+                }
+                log(textStatus);
+                log(errorThrown);
+                alert("Error! " + textStatus + " " + errorThrown);
+            }).always(function() {
+                pendingRequest = null;
+                ajaxButtons.find("img").css("animation", "");
+            });
+            ajaxButtons.find("img").css("animation", "spin 2s linear infinite");
         });
-        powerButtons.find("img").css("animation", "spin 2s linear infinite");
     });
 
     function pollTvStatus() {
         $.ajax({
             url: "tv/status"
         }).done(function(data) {
-            var tvStatusField = $('#tvStatus');
-            tvStatusField.text(data.powerStatus);
+            var tvStatusFields = $('.tvStatus');
+            tvStatusFields.text("TV is " + data.powerStatus);
         }).fail(function(xhr, textStatus, errorThrown) {
             log(textStatus);
             log(errorThrown);
@@ -146,34 +171,30 @@ $(document).ready(function() {
 </head>
 <body>
 
-<!--- 
-<<<
-TODO
- - pretty icon?
- - actual ajax
- + subdomain!
->>>
--->
-
 <div class="wrap">
    <div class="box">
-        <a href="tv/standby" class="powerButton" id="offButton">
+        <a href="tv/standby" class="ajaxButton">
             <div class="boxInner">
                 <img src="images/poweroff.svg"></img>
+                <div class="boxTextTop tvStatus"></div>
             </div>
         </a>
     </div>
     <div class="box">
-        <a href="tv/on" class="powerButton" id="onButton">
+        <a href="tv/on" class="ajaxButton">
             <div class="boxInner">
                 <img src="images/poweron.svg"></img>
+                <div class="boxTextTop tvStatus"></div>
             </div>
         </a>
     </div>
     <div class="box">
-        <div class="boxInner">
-            <div id="tvStatus">TV status</div>
-        </div>
+        <a href="tv/as" class="ajaxButton" title="Change tv input to pi">
+            <div class="boxInner">
+                <img src="images/pi.svg"></img>
+                <div class="boxTextBottom">Activate PI</div>
+            </div>
+        </a>
     </div>
     <div class="box">
         <a href="xbmc">
@@ -182,16 +203,39 @@ TODO
         </a>
     </div>
     <div class="box">
+        <a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}' class="ajaxButton">
+            <div class="boxInner">
+                <img src="images/refresh-videos.png"></img>
+            </div>
+        </a>
+    </div>
+    <div class="box">
+        <a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}' class="ajaxButton">
+            <div class="boxInner">
+                <img src="images/refresh-music.png"></img>
+            </div>
+        </a>
+    </div>
+    <div class="box">
         <a href="transmission">
             <div class="boxInner">
-                    <img src="images/transmission.png"></img>
+                <img src="images/transmission.png"></img>
+                <div class="boxTextBottom">Torrents</div>
             </div>
         </a>
     </div>
     <div class="box">
         <a href="gui">
             <div class="boxInner">
-                    <img src="images/btsync.png"></img>
+                <img src="images/btsync.png"></img>
+                <div class="boxTextBottom">btsync</div>
+            </div>
+        </a>
+    </div>
+    <div class="box">
+        <a href="//192.168.1.4:631">
+            <div class="boxInner">
+                <img src="images/printer.png"></img>
             </div>
         </a>
     </div>
