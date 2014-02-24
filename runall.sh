@@ -14,7 +14,7 @@ else
 fi
 
 servers/gatekeeper/startserver.py --username twilio --password gobears --port 8042 --sslcrt `readlink -m server.crt` --sslkey `readlink -m server.key`
-remote/startserver.py
+PYTHONPATH=. remote/startserver.py --port 8043
 
 ## nginx is daemonized, so there's no use running it inside of a screen
 sudo nginx -s quit; sudo nginx -c `readlink -m nginx.conf`

@@ -12,5 +12,5 @@ if extraCmds:
 project = gitserver.GitSensitiveProject(
      name='remote',
      compileCommand='echo Nothing to compile!',
-     runCommand='./main.py')
+     runCommand='./main.py' + extraCmds)
 gitserver.startGitSensitiveScreen('remote', [project])
