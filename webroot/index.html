@@ -2,25 +2,202 @@
 <html>
 <head>
 <title>Welcome to jpi!</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
+    html, body {
+        height: 100%;
+    }
+
     body {
-        width: 35em;
         margin: 0 auto;
         font-family: sans-serif;
+        background-image: url("images/pi.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
     }
+
+    #tvStatus {
+        position: relative;
+        margin-top: 40%;
+    }
+
+    .wrap {
+    }
+
+    .boxInner img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .boxInner.xbmc {
+        background-image: url("images/xbmc.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .box {
+        width: 20%;
+        padding-bottom: 20%;
+        /*background: #00F;
+        color: #FFF;*/
+        position: relative;
+        float: left;
+    }
+
+    .boxInner {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid black;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    @media only screen and (max-width : 480px) {
+       /* Smartphone view */
+       .box {
+          width: 33.3%;
+          padding-bottom: 33.3%;
+       }
+    }
+    @media only screen and (max-width : 650px) and (min-width : 481px) {
+       /* Tablet view */
+       .box {
+          width: 33.3%;
+          padding-bottom: 33.3%;
+       }
+    }
+    @media only screen and (max-width : 1050px) and (min-width : 651px) {
+       /* Small desktop / ipad view */
+       .box {
+          width: 33.3%;
+          padding-bottom: 33.3%;
+       }
+    }
+    @media only screen and (max-width : 1290px) and (min-width : 1051px) {
+       /* Medium desktop */
+       .box {
+          width: 33.3%;
+          padding-bottom: 33.3%;
+       }
+    }
+
+    @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+    @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+    @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
 </style>
+
+<script src="js/jquery-2.1.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    function log(l) {
+        if(console && console.log) {
+            console.log(l);
+        }
+    }
+
+    var powerButtons = $('.powerButton');
+
+    var pendingRequest = null;
+    powerButtons.click(function(e) {
+        if(pendingRequest !== null) {
+            return;
+        }
+        e.preventDefault();
+
+        pendingRequest = $.ajax({
+            url: this.href
+        }).done(function() {
+        }).fail(function(xhr, textStatus, errorThrown) {
+            log(textStatus);
+            log(errorThrown);
+            alert("Error! " + textStatus + " " + errorThrown);
+        }).always(function() {
+            pendingRequest = null;
+            powerButtons.find("img").css("animation", "");
+        });
+        powerButtons.find("img").css("animation", "spin 2s linear infinite");
+    });
+
+    function pollTvStatus() {
+        $.ajax({
+            url: "tv/status"
+        }).done(function(data) {
+            var tvStatusField = $('#tvStatus');
+            tvStatusField.text(data.powerStatus);
+        }).fail(function(xhr, textStatus, errorThrown) {
+            log(textStatus);
+            log(errorThrown);
+        }).always(function() {
+            setTimeout(pollTvStatus, 1000);
+        });
+    }
+    pollTvStatus();
+});
+</script>
+
 </head>
 <body>
-<h1>Welcome to jpi!</h1>
 
 <!--- 
+<<<
 TODO
  - pretty icon?
  - actual ajax
  + subdomain!
+>>>
 -->
 
-<h2>Stuff to do</h2>
+<div class="wrap">
+   <div class="box">
+        <a href="tv/standby" class="powerButton" id="offButton">
+            <div class="boxInner">
+                <img src="images/poweroff.svg"></img>
+            </div>
+        </a>
+    </div>
+    <div class="box">
+        <a href="tv/on" class="powerButton" id="onButton">
+            <div class="boxInner">
+                <img src="images/poweron.svg"></img>
+            </div>
+        </a>
+    </div>
+    <div class="box">
+        <div class="boxInner">
+            <div id="tvStatus">TV status</div>
+        </div>
+    </div>
+    <div class="box">
+        <a href="xbmc">
+            <div class="boxInner xbmc">
+            </div>
+        </a>
+    </div>
+    <div class="box">
+        <a href="transmission">
+            <div class="boxInner">
+                    <img src="images/transmission.png"></img>
+            </div>
+        </a>
+    </div>
+    <div class="box">
+        <a href="gui">
+            <div class="boxInner">
+                    <img src="images/btsync.png"></img>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!--
 <ul>
 <li>
     <a href="xbmc">xbmc</a> - media
@@ -38,6 +215,7 @@ TODO
 
 <li><a href="http://192.168.1.132:631/">cups</a> - printing (only works if you are connected locally)</li>
 </ul>
+-->
 
 </body>
 </html>
