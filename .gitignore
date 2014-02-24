@@ -1,9 +1,10 @@
 *.swp
+*.log
 
 servers/
-node_modules/
-tnt/
 
 server.crt
 server.csr
 server.key
+
+htpasswd

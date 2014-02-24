@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to jpi!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to jpi!</h1>
+
+<!--- 
+TODO
+ - pretty icon?
+ - actual ajax
+ + subdomain!
+-->
+
+<h2>Stuff to do</h2>
+<ul>
+<li>
+    <a href="xbmc">xbmc</a> - media
+    <ul>
+        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}'>Scan Videos</a></li>
+        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}'>Scan Audio</a></li>
+        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}'>Clean Videos</a></li>
+        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}'>Clean Audio</a></li>
+    </ul>
+</li>
+
+<li><a href="gui">btsync</a></li>
+
+<li><a href="transmission">transmission</a> - torrenting</li>
+
+<li><a href="http://192.168.1.132:631/">cups</a> - printing (only works if you are connected locally)</li>
+</ul>
+
+</body>
+</html>
+

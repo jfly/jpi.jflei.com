@@ -1,6 +1,0 @@
-screen -t "tnoodle" 1
-stuff "while true; do sudo ./tmt make clean -p wca; ./tmt make dist -p wca --skip-noflex-warning; sudo java -jar wca/dist/TNoodle.jar -n -p 8080 --inject ../../tnoodle-analytics.js; done\012"
-
-screen -t "tnoodle git" 2
-
-stuff "git-tools/poll.sh 'curl localhost:8080/kill/now'\012"
