@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>jpi</title>
+<title>kent</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-<link rel="shortcut icon" sizes="196x196" href="images/pi.png"> 
-<link rel="apple-touch-icon-precomposed" sizes="196x196" href="images/pi.png"> 
+<link rel="shortcut icon" sizes="128x128" href="images/superman.png"> 
+<link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/superman.png"> 
 
-<link rel="icon" type="image/png" href="images/pi.png" />
+<link rel="icon" type="image/png" href="images/superman.png" />
 
 <style>
     html, body {
@@ -21,8 +21,8 @@
     body {
         margin: 0 auto;
         font-family: sans-serif;
-        background-image: url("images/pi.svg");
-        background-size: contain;
+        background-image: url("images/daily-planet.jpg");
+        background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
     }
@@ -173,7 +173,7 @@ $(document).ready(function() {
             setTimeout(pollTvStatus, 1000);
         });
     }
-    pollTvStatus();
+    //<<<pollTvStatus();
 });
 </script>
 
@@ -181,52 +181,28 @@ $(document).ready(function() {
 <body>
 
 <div class="wrap">
-   <div class="box">
-        <a href="tv/standby" class="ajaxButton">
-            <div class="boxInner">
-                <img src="images/poweroff.svg"></img>
-                <div class="boxTextTop tvStatus"></div>
-            </div>
-        </a>
-    </div>
     <div class="box">
-        <a href="tv/on" class="ajaxButton">
-            <div class="boxInner">
-                <img src="images/poweron.svg"></img>
-                <div class="boxTextTop tvStatus"></div>
-            </div>
-        </a>
-    </div>
-    <div class="box">
-        <a href="tv/as" class="ajaxButton" title="Change tv input to pi">
-            <div class="boxInner">
-                <img src="images/pi.svg"></img>
-                <div class="boxTextBottom">Activate PI</div>
-            </div>
-        </a>
-    </div>
-    <div class="box">
-        <a href="xbmc">
+        <a href="//xbmc.kent.jflei.com:8080">
             <div class="boxInner xbmc">
             </div>
         </a>
     </div>
     <div class="box">
-        <a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}' class="ajaxButton">
+        <a href='//xbmc.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}' class="ajaxButton">
             <div class="boxInner">
                 <img src="images/refresh-videos.png"></img>
             </div>
         </a>
     </div>
     <div class="box">
-        <a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}' class="ajaxButton">
+        <a href='//xbmc.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}' class="ajaxButton">
             <div class="boxInner">
                 <img src="images/refresh-music.png"></img>
             </div>
         </a>
     </div>
     <div class="box">
-        <a href="transmission">
+        <a href="//torrents.kent.jflei.com:8080">
             <div class="boxInner">
                 <img src="images/transmission.png"></img>
                 <div class="boxTextBottom">Torrents</div>
@@ -234,41 +210,13 @@ $(document).ready(function() {
         </a>
     </div>
     <div class="box">
-        <a href="gui">
-            <div class="boxInner">
-                <img src="images/btsync.png"></img>
-                <div class="boxTextBottom">btsync</div>
-            </div>
-        </a>
-    </div>
-    <div class="box">
-        <a href="//jpi:631">
+        <a href="//kent:631">
             <div class="boxInner">
                 <img src="images/printer.png"></img>
             </div>
         </a>
     </div>
 </div>
-
-<!--
-<ul>
-<li>
-    <a href="xbmc">xbmc</a> - media
-    <ul>
-        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}'>Scan Videos</a></li>
-        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}'>Scan Audio</a></li>
-        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}'>Clean Videos</a></li>
-        <li><a href='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}'>Clean Audio</a></li>
-    </ul>
-</li>
-
-<li><a href="gui">btsync</a></li>
-
-<li><a href="transmission">transmission</a> - torrenting</li>
-
-<li><a href="http://192.168.1.132:631/">cups</a> - printing (only works if you are connected locally)</li>
-</ul>
--->
 
 </body>
 </html>
