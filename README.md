@@ -1,4 +1,12 @@
-This repo just contains stuff that runs on my raspberry pi at home, affectionally known as jpi (rhymes with jfly).
+# jpi
+
+This repo just contains stuff that runs on my HTPC. This is meant to be set up
+on an Arch machine bootstrapped for HTPC with
+[my dotfiles](https://github.com/jfly/dotfiles).
+
+
+# TODO
+
 
 Need a version of nginx configured with:
 
