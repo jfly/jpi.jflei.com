@@ -4,6 +4,7 @@ This repo just contains stuff that runs on my HTPC. This is meant to be set up
 on an Arch machine bootstrapped for HTPC with
 [my dotfiles](https://github.com/jfly/dotfiles).
 
+Expected to have transmission installed and running.
 
 # TODO
 

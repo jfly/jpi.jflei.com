@@ -54,8 +54,8 @@
         height: 100%;
     }
 
-    .boxInner.xbmc {
-        background-image: url("images/xbmc.png");
+    .boxInner.kodi {
+        background-image: url("images/kodi.png");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
@@ -144,7 +144,7 @@ $(document).ready(function() {
             }).done(function() {
             }).fail(function(xhr, textStatus, errorThrown) {
                 if(xhr.responseText == "") {
-                    // For some reason, xbmc is returning an empty string
+                    // For some reason, kodi is returning an empty string
                     // on successful ajax requests. Detect this and don't
                     // error out.
                     return;
@@ -182,20 +182,20 @@ $(document).ready(function() {
 
 <div class="wrap">
     <div class="box">
-        <a href="//xbmc.kent.jflei.com:8080">
-            <div class="boxInner xbmc">
+        <a href="//kodi.kent.jflei.com:8080">
+            <div class="boxInner kodi">
             </div>
         </a>
     </div>
     <div class="box">
-        <a href='//xbmc.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}' class="ajaxButton">
+        <a href='//kodi.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}' data-extra-request='kodi/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}' class="ajaxButton">
             <div class="boxInner">
                 <img src="images/refresh-videos.png"></img>
             </div>
         </a>
     </div>
     <div class="box">
-        <a href='//xbmc.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}' data-extra-request='xbmc/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}' class="ajaxButton">
+        <a href='//kodi.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}' data-extra-request='kodi/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}' class="ajaxButton">
             <div class="boxInner">
                 <img src="images/refresh-music.png"></img>
             </div>

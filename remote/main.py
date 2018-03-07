@@ -87,7 +87,7 @@ def pollTvStatus():
 
 
 # TODO - Look into running a persistent cec-client to avoid
-#        startup and teardown costs, and breaking xbmc.
+#        startup and teardown costs, and breaking kodi.
 # cec-client commands came from http://forums.pulse-eight.com/yaf_postst912_power-status-of-TV-using-cec-client.aspx
 @coroutine
 def pollTvStatusOnce():
