@@ -13,8 +13,9 @@ else
 	git clone --recursive https://github.com/jfly/gatekeeper.git servers/gatekeeper
 fi
 
-servers/gatekeeper/startserver.py --port 8042
+#<<< TODO only run on clark? >>> servers/gatekeeper/startserver.py --port 8042
 #<<<PYTHONPATH=. remote/startserver.py --port=8043
 
 ## nginx is daemonized, so there's no use running it inside of a screen
-sudo nginx -s quit; sudo nginx -c `readlink -m nginx.conf`
+sudo nginx -p "`pwd`" -c nginx.conf -s quit || sudo killall nginx #<<< TODO for some reason stopping nginx normally doesn't seem to work >>>
+sudo nginx -p "`pwd`" -c nginx.conf
