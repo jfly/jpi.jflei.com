@@ -108,101 +108,20 @@
           padding-bottom: 33.3%;
        }
     }
-
-    @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-    @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-    @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-
 </style>
-
-<script src="js/jquery-2.1.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    function log(l) {
-        if(console && console.log) {
-            console.log(l);
-        }
-    }
-
-    var ajaxButtons = $('.ajaxButton');
-
-    var pendingRequest = null;
-    ajaxButtons.click(function(e) {
-        if(pendingRequest !== null) {
-            return;
-        }
-        e.preventDefault();
-
-        var requests = [ this.href ];
-        var extraRequest = $(this).data('extra-request');
-        if(extraRequest) {
-            requests.push(extraRequest);
-        }
-        requests.forEach(function(request) {
-            pendingRequest = $.ajax({
-                url: request
-            }).done(function() {
-            }).fail(function(xhr, textStatus, errorThrown) {
-                if(xhr.responseText == "") {
-                    // For some reason, kodi is returning an empty string
-                    // on successful ajax requests. Detect this and don't
-                    // error out.
-                    return;
-                }
-                log(textStatus);
-                log(errorThrown);
-                alert("Error! " + textStatus + " " + errorThrown);
-            }).always(function() {
-                pendingRequest = null;
-                ajaxButtons.find("img").css("animation", "");
-            });
-            ajaxButtons.find("img").css("animation", "spin 2s linear infinite");
-        });
-    });
-
-    function pollTvStatus() {
-        $.ajax({
-            url: "tv/status"
-        }).done(function(data) {
-            var tvStatusFields = $('.tvStatus');
-            tvStatusFields.text("TV is " + data.powerStatus);
-        }).fail(function(xhr, textStatus, errorThrown) {
-            log(textStatus);
-            log(errorThrown);
-        }).always(function() {
-            setTimeout(pollTvStatus, 1000);
-        });
-    }
-    //<<<pollTvStatus();
-});
-</script>
 
 </head>
 <body>
 
 <div class="wrap">
     <div class="box">
-        <a href="//kodi.kent.jflei.com:8080">
+        <a href="#" data-subdomain="kodi">
             <div class="boxInner kodi">
             </div>
         </a>
     </div>
     <div class="box">
-        <a href='//kodi.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Scan"}' data-extra-request='kodi/jsonrpc?request={"jsonrpc":"2.0","method":"VideoLibrary.Clean"}' class="ajaxButton">
-            <div class="boxInner">
-                <img src="images/refresh-videos.png"></img>
-            </div>
-        </a>
-    </div>
-    <div class="box">
-        <a href='//kodi.kent.jflei.com:8080/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Scan"}' data-extra-request='kodi/jsonrpc?request={"jsonrpc":"2.0","method":"AudioLibrary.Clean"}' class="ajaxButton">
-            <div class="boxInner">
-                <img src="images/refresh-music.png"></img>
-            </div>
-        </a>
-    </div>
-    <div class="box">
-        <a href="//torrents.kent.jflei.com:8080">
+        <a href="#" data-subdomain="torrents">
             <div class="boxInner">
                 <img src="images/transmission.png"></img>
                 <div class="boxTextBottom">Torrents</div>
@@ -228,6 +147,14 @@ $(document).ready(function() {
 -->
 </div>
 
+<script>
+    (function() {
+        let links = document.querySelectorAll("a[data-subdomain]");
+        links.forEach(link => {
+            link.href = location.protocol + "//" + link.dataset.subdomain + "." + location.host;
+        });
+    })();
+</script>
+
 </body>
 </html>
-

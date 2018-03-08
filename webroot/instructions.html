@@ -39,7 +39,7 @@ Next, right click on the magnet for the torrent you want to download, and left c
 
 <div class="step" id="step-4">
 <a href="#step-4">4.</a>
-Now open up the <a href="http://torrents.kent.jflei.com:8080/" target="_blank">transmission web interface</a>.
+Now open up the <a href="#" data-subdomain="torrents" target="_blank">transmission web interface</a>.
 </div>
 
 <div class="step" id="step-5a">
@@ -78,7 +78,7 @@ Double click on the torrents folder.
 <div class="step" id="step-6c">
 <a href="#step-6c">6c.</a>
 Copy your download (make sure it is finished downloading on
-<a href="http://torrents.kent.jflei.com:8080/" target="_blank">transmission</a>)
+<a href="#" data-subdomain="torrents" target="_blank">transmission</a>)
 <img src="/images/screenshots/kent-torrents-copying-download.png">
 </div>
 
@@ -103,7 +103,7 @@ Once you have opened the correct folder (and subcategory), paste your download:
 <div class="step" id="step-7">
 <a href="#step-7">7.</a>
 Once the copy from step 6f is completed, go back to
-<a href="http://torrents.kent.jflei.com:8080/" target="_blank">transmission</a>.
+<a href="#" data-subdomain="torrents" target="_blank">transmission</a>.
 Find the download you just pasted, right click and select "Trash data and remove from list":
 <img src="/images/screenshots/remove.png">
 </div>
@@ -111,7 +111,7 @@ Find the download you just pasted, right click and select "Trash data and remove
 <div class="step" id="step-8">
 <a href="#step-8">8.</a>
 Now tell kodi to check for new stuff. Go to the
-<a href="http://kodi.kent.jflei.com:8080/" target="_blank">kodi web interface</a>.
+<a href="#" data-subdomain="kodi" target="_blank">kodi web interface</a>.
 Click "Remote", then click "Update" under video library. Must check television
 screen to be sure video library is updated.
 <img src="/images/screenshots/update-video-library.png">
@@ -126,6 +126,15 @@ Refresh your kodi app on your phone or your ipad.
 <a href="#step-10">10.</a>
 Sit back and enjoy!
 </div>
+
+<script>
+    (function() {
+        let links = document.querySelectorAll("a[data-subdomain]");
+        links.forEach(link => {
+            link.href = location.protocol + "//" + link.dataset.subdomain + "." + location.host;
+        });
+    })();
+</script>
 
 </body>
 </html>
