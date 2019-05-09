@@ -9,3 +9,4 @@ server.csr
 server.key
 
 htpasswd
+tmp-nginx-for-runall.conf

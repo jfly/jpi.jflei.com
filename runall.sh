@@ -18,5 +18,5 @@ fi
 
 ## nginx is daemonized, so there's no use running it inside of a screen
 sudo killall nginx # For some reason stopping nginx normally doesn't seem to work.
-sed 's/REPLACE_WITH_USER/kent/' nginx.conf > /tmp/tmp-nginx-for-runall.conf
-sudo nginx -p "`pwd`" -c /tmp/tmp-nginx-for-runall.conf
+sed 's/REPLACE_WITH_USER/kent/' nginx.conf > ./tmp-nginx-for-runall.conf
+sudo nginx -p "`pwd`" -c ./tmp-nginx-for-runall.conf
