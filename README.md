@@ -1,3 +1,5 @@
+DEPRECATED: Some content has moved to https://github.com/jfly/dotfiles
+
 # jpi
 
 DEPRECATED: The contents of this repo have moved to
