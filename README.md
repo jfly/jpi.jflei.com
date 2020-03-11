@@ -1,3 +1,5 @@
+DEPRECATED: Some content has moved to https://github.com/jfly/dotfiles
+
 # jpi
 
 This repo just contains stuff that runs on my HTPC. This is meant to be set up
